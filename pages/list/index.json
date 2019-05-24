@@ -1,0 +1,18 @@
+{
+  "usingComponents": {
+    "van-button": "/miniprogram_npm/vant-weapp/button/index",
+    "van-icon": "/miniprogram_npm/vant-weapp/icon/index",
+    "van-popup": "/miniprogram_npm/vant-weapp/popup/index",
+    "van-action-sheet": "/miniprogram_npm/vant-weapp/action-sheet/index",
+    "van-checkbox": "/miniprogram_npm/vant-weapp/checkbox/index",
+    "van-checkbox-group": "/miniprogram_npm/vant-weapp/checkbox-group/index",
+    "van-card": "/miniprogram_npm/vant-weapp/card/index",
+    "van-submit-bar": "/miniprogram_npm/vant-weapp/submit-bar/index",
+    "van-badge": "/miniprogram_npm/vant-weapp/badge/index",
+    "van-toast": "/miniprogram_npm/vant-weapp/toast/index",
+    "van-tabbar": "/miniprogram_npm/vant-weapp/tabbar/index",
+    "van-tabbar-item": "/miniprogram_npm/vant-weapp/tabbar-item/index",
+    "van-field": "/miniprogram_npm/vant-weapp/field/index",
+    "van-picker": "/miniprogram_npm/vant-weapp/picker/index"
+  }
+}

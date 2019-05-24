@@ -1,0 +1,22 @@
+<view>
+  <van-cell-group>
+    <van-field bind:click-icon="popTea" icon="arrow" value="{{ teaOrder.Tea_Name }}" placeholder="请选择茶叶" readonly />
+    <van-field bind:input="fieldChange" data-name="teaOrder.Price" value="{{teaOrder.Price}}" placeholder="价格" />
+    <van-field bind:input="fieldChange" data-name="teaOrder.Count" value="{{teaOrder.Count}}" placeholder="数量（斤）" />
+<van-field bind:input="fieldChange" data-name="teaOrder.CustomerName"  value="{{teaOrder.CustomerName}}" placeholder="顾客姓名"/>
+<van-field bind:input="fieldChange" data-name="teaOrder.Phone"  value="{{teaOrder.Phone}}" placeholder="电话"/>
+<van-field bind:input="fieldChange" data-name="teaOrder.Address"  value="{{teaOrder.Address}}" placeholder="地址"/>
+    <van-field bind:click-icon="popWrapper" icon="arrow" value="{{ teaOrder.Carton_Name }}" placeholder="请选择包装" readonly />
+    <van-button round type="primary" bind:click="submit" class='submitButton'>提交</van-button>
+  </van-cell-group>
+
+
+  <van-popup show="{{showTea}}" position="bottom" overlay="false">
+    <van-picker show-toolbar columns="{{teas}}" bind:cancel="onTeaCancel" bind:confirm="onTeaConfirm" />
+  </van-popup>
+  <van-popup show="{{showWrapper}}" position="bottom" overlay="false">
+    <van-picker show-toolbar columns="{{wrappers}}" bind:cancel="onCartonCancel" bind:confirm="onCartonConfirm" />
+  </van-popup>
+  <van-toast id="van-toast" />
+
+</view>
