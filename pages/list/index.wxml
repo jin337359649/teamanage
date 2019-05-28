@@ -1,13 +1,11 @@
-<van-card
-  num="2"
-  tag="标签"
-  price="10.00"
-  desc="描述信息"
-  title="商品标题"
-  thumb="{{ imageURL }}"
->
-  <view slot="footer">
-    <van-button size="mini">按钮</van-button>
-    <van-button size="mini">按钮</van-button>
+<view>
+  <van-card wx:for="{{orders}}" num="{{item.count}}" tag="{{item.sendTag}}" price="{{item.price}}" desc="{{item.address}}" title="{{item.teaName}}" thumb="{{ item.imgUrl }}" thumb-link="/pages/index/index?orderId={{item.id}}"> 
+  <view wx:if="{{!item.sendTag}}" slot="footer">
+    <van-button bind:click="send" size="mini">发货</van-button>
   </view>
-</van-card>
+  </van-card>
+
+  <van-button round type="primary" class='fixButton' bind:click="ClickCreate">
+    <van-icon name="plus" />
+  </van-button>
+</view>

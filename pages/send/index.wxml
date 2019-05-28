@@ -1,0 +1,9 @@
+<view>
+  <van-panel title="{{teaName}}" desc="{{customerName}}-{{phone}}-{{address}}" status="{{price}}*{{count}}">
+    <view>内容</view>
+  </van-panel>
+
+  <van-button round type="primary" class='fixButton' bind:click="ClickCreate">
+    <van-icon name="plus" />
+  </van-button>
+</view>

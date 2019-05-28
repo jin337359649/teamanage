@@ -22,7 +22,6 @@
 
 .submitButton{
   float: right;
-  margin-right: 50%;
-  transform: translateX(50%);
+  margin-right: 10px;
   margin-top:10px;
 }

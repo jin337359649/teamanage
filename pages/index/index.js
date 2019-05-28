@@ -15,6 +15,7 @@ Page({
     teas: [],
     wrappers: [],
     customers: [],
+    disSubmit: false,
     teaOrder: {
 
     }
@@ -80,16 +81,29 @@ Page({
     });
   },
   GetOrderById: function() {
+    var obj = this;
     wx.request({
-      url: 'localhost:9320/api/TeaOrder/GetById',
+      url: 'http://localhost:56555/api/TeaOrder/GetById',
       data: {
-        id: this.teaOrder.Id
+        id: this.data.teaOrder.Id
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        teaOrder = res;
+        if (res.data.state) {
+          obj.setData({
+            'teaOrder.Address': res.data.data.address,
+            'teaOrder.Tea_Name': res.data.data.teaName,
+            'teaOrder.Price': res.data.data.price,
+            'teaOrder.Count': res.data.data.count,
+            'teaOrder.CustomerName': res.data.data.customerName,
+            'teaOrder.Phone': res.data.data.phone,
+            'teaOrder.Carton_Name': res.data.data.cartonName,
+            'teaOrder.Carton_Id': res.data.data.cartonId,
+            'teaOrder.Tea_Id': res.data.data.teaId
+          });
+        }
       }
     })
   },
@@ -101,10 +115,12 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        obj.teaList = res.data;
-        obj.setData({
-          teas: res.data.map((p) => p.name)
-        });
+        if (res.data.state) {
+          obj.teaList = res.data.data;
+          obj.setData({
+            teas: res.data.data.map((p) => p.name)
+          });
+        }
       }
     })
   },
@@ -116,10 +132,12 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        obj.cartonList = res.data;
-        obj.setData({
-          wrappers: res.data.map((p) => p.name)
-        });
+        if (res.data.state) {
+          obj.cartonList = res.data.data;
+          obj.setData({
+            wrappers: res.data.data.map((p) => p.name)
+          });
+        }
       }
     })
   },
@@ -131,16 +149,18 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        obj.customerList = res.data;
+        if (res.data.state) {
+          obj.customerList = res.data.data;
+        }
       }
     })
   },
   onLoad: function(options) {
 
     if (options.orderId) {
-      teaOrder.Id = options.orderId;
+      this.data.teaOrder.Id = options.orderId;
 
-      GetOrderById();
+      this.GetOrderById();
 
     }
 
@@ -184,9 +204,17 @@ Page({
     })
   },
   submit: function() {
-    let customer 
-    if (this.customerList){
-      customer = this.customerList.filter((p) => p.name == this.data.teaOrder.CustomerName && p.phone == this.data.teaOrder.phone);
+    this.setData({
+      disSubmit: true
+    });
+    if (!this.validate()) {
+
+      return;
+    }
+
+    let customer
+    if (this.customerList) {
+      customer = this.customerList.filter((p) => p.name == this.data.teaOrder.CustomerName && p.phone == this.data.teaOrder.Phone);
     }
 
     if (customer[0]) {
@@ -194,9 +222,9 @@ Page({
       this.DoSave(this.data.teaOrder);
     } else {
       this.CreateCustomer({
-        Phone: this.data.teaOrder.phone,
-        Address: this.data.teaOrder.address,
-        Name: this.data.teaOrder.name
+        Phone: this.data.teaOrder.Phone,
+        Address: this.data.teaOrder.Address,
+        Name: this.data.teaOrder.CustomerName
       });
     }
   },
@@ -211,8 +239,12 @@ Page({
       data: customer,
       success(res) {
         if (res.data.state) {
-          DoSave(obj.data.teaOrder);
+          obj.data.teaOrder.Customer_Id = res.data.data;
+          obj.DoSave(obj.data.teaOrder);
         } else {
+          this.setData({
+            disSubmit: false
+          });
           Toast.fail(res.data.message);
         }
       }
@@ -232,6 +264,9 @@ Page({
             url: '/pages/list/index'
           });
         } else {
+          this.setData({
+            disSubmit: false
+          });
           Toast.fail(res.data.message);
         }
       }
@@ -239,9 +274,53 @@ Page({
   },
   fieldChange: function(e) {
     let name = e.currentTarget.dataset.name;
-    let nameMap = {}
-    nameMap[name] = e.detail || e.detail.value;
+    let nameMap = {};
+    let value = (e.detail || e.detail.value);
+    nameMap[name] = value ? value : '';
 
     this.setData(nameMap);
+  },
+  returnList:function(){
+    wx.redirectTo({
+      url: '/pages/list/index',
+    })
+  },
+  validate: function() {
+    if (!this.data.teaOrder.CustomerName) {
+      Toast.fail("顾客姓名不能为空！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Phone) {
+      Toast.fail("顾客电话不能为空！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Address) {
+      Toast.fail("顾客地址不能为空！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Carton_Id) {
+      Toast.fail("请选择包装！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Tea_Id) {
+      Toast.fail("请选择茶叶！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Count) {
+      Toast.fail("数量不能为空！");
+      return false;
+    }
+
+    if (!this.data.teaOrder.Price) {
+      Toast.fail("价格不能为空！");
+      return false;
+    }
+
+    return true;
   }
 })
