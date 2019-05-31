@@ -83,7 +83,7 @@ Page({
   GetOrderById: function() {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/GetById',
+      url: app.globalData.baseApiPath + 'TeaOrder/GetById',
       data: {
         id: this.data.teaOrder.Id
       },
@@ -101,7 +101,8 @@ Page({
             'teaOrder.Phone': res.data.data.phone,
             'teaOrder.Carton_Name': res.data.data.cartonName,
             'teaOrder.Carton_Id': res.data.data.cartonId,
-            'teaOrder.Tea_Id': res.data.data.teaId
+            'teaOrder.Tea_Id': res.data.data.teaId,
+            'teaOrder.Send_Code': res.data.data.send_Code
           });
         }
       }
@@ -110,7 +111,7 @@ Page({
   LoadTeas: function() {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/GetTeaList',
+      url: app.globalData.baseApiPath + 'TeaOrder/GetTeaList',
       header: {
         'content-type': 'application/json' // 默认值
       },
@@ -127,7 +128,7 @@ Page({
   LoadCartons: function() {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/GetCartonList',
+      url: app.globalData.baseApiPath + 'TeaOrder/GetCartonList',
       header: {
         'content-type': 'application/json' // 默认值
       },
@@ -144,7 +145,7 @@ Page({
   LoadCustomer: function() {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/QueryCustomer',
+      url: app.globalData.baseApiPath + 'TeaOrder/QueryCustomer',
       header: {
         'content-type': 'application/json' // 默认值
       },
@@ -231,7 +232,7 @@ Page({
   CreateCustomer: function(customer) {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/SaveCustomer',
+      url: app.globalData.baseApiPath + 'TeaOrder/SaveCustomer',
       method: "POST",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -252,7 +253,7 @@ Page({
   },
   DoSave: function(order) {
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/Save',
+      url: app.globalData.baseApiPath + 'TeaOrder/Save',
       method: "POST",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"

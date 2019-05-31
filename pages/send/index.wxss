@@ -3,3 +3,9 @@
   right: 10px;
   bottom: 10px;
 }
+
+.submitButton{
+  float: right;
+  margin-right: 10px;
+  margin-top:10px;
+}

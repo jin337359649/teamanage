@@ -34,6 +34,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    baseApiPath: "http://61.147.70.90:9202/api/"
   }
 })

@@ -21,7 +21,7 @@ Page({
   LoadTeas: function() {
     var obj = this;
     wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/QueryOrder',
+      url: app.globalData.baseApiPath + '/TeaOrder/QueryOrder',
       header: {
         'content-type': 'application/json' // 默认值
       },
@@ -85,9 +85,9 @@ Page({
       url: '/pages/index/index'
     });
   },
-  showDetail(e) {
+  send:function(e) {
     wx.redirectTo({
-      url: '/pages/index/index?orderId=' + e
+      url: '/pages/send/index?orderId=' + e.target.dataset.id
     })
   }
 })

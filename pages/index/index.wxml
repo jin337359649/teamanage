@@ -8,7 +8,7 @@
 <van-field bind:input="fieldChange" data-name="teaOrder.Address"  value="{{teaOrder.Address}}" placeholder="地址"/>
     <van-field bind:click-icon="popWrapper" icon="arrow" value="{{ teaOrder.Carton_Name }}" placeholder="请选择包装" readonly />
      <van-button round type="primary" bind:click="returnList" class='submitButton'>返回</van-button>
-     <van-button disabled='{{disSubmit}}' round type="primary" bind:click="submit" class='submitButton'>提交</van-button>
+     <van-button wx:if="{{!teaOrder.Send_Code}}" disabled='{{disSubmit}}' round type="primary" bind:click="submit" class='submitButton'>提交</van-button>
   </van-cell-group>
 
 

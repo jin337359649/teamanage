@@ -8,9 +8,14 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    orders: [],
-    currentPage: 1,
-    pageSize: 10
+    sendFee: '',
+    sendCode: '',
+    orderId: '',
+    count: '',
+    address: '',
+    customerName: '',
+    price: '',
+    teaName: ''
   },
   //事件处理函数
   bindViewTap: function() {
@@ -18,32 +23,10 @@ Page({
       url: '../logs/logs'
     })
   },
-  LoadTeas: function() {
-    var obj = this;
-    wx.request({
-      url: 'http://localhost:56555/api/TeaOrder/QueryOrder',
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      data: {
-        CurrentPage: obj.data.currentPage,
-        PageSize: obj.data.pageSize,
-        Order: "Create_Time desc"
-      },
-      success(res) {
-        if (res.data.state) {
-          console.log(res.data.data);
-          obj.setData({
-            currentPage: res.data.data.currentPage,
-            orders: res.data.data.items,
-            pageSize: res.data.data.pageSize
-          });
-        }
-      }
-    })
-  },
-  onLoad: function() {
-    this.LoadTeas();
+  onLoad: function(options) {
+
+    this.data.orderId = options.orderId;
+    this.LoadOrderById();
 
     if (app.globalData.userInfo) {
       this.setData({
@@ -80,14 +63,70 @@ Page({
       hasUserInfo: true
     })
   },
-  ClickCreate: function() {
-    wx.redirectTo({
-      url: '/pages/index/index'
+  submit: function(e) {
+    this.setData({
+      disSubmit: true
     });
+    let obj = this;
+    wx.request({
+      url: app.globalData.baseApiPath + 'TeaOrder/Send',
+      data: {
+        Id: this.data.orderId,
+        Send_Code: this.data.sendCode,
+        Send_Fee: this.data.sendFee
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: 'POST',
+      success: function(res) {
+        if (res.data.state) {
+          wx.redirectTo({
+            url: '/pages/list/index'
+          })
+        } else {
+          obj.setData({
+            disSubmit: false
+          });
+          Toast.fail(res.data.message);
+        }
+      }
+    })
   },
-  showDetail(e) {
-    wx.redirectTo({
-      url: '/pages/index/index?orderId=' + e
+  fieldChange: function(e) {
+    let name = e.currentTarget.dataset.name;
+    let nameMap = {};
+    let value = (e.detail || e.detail.value);
+    nameMap[name] = value ? value : '';
+
+    this.setData(nameMap);
+  },
+  LoadOrderById: function() {
+    let obj = this;
+    wx.request({
+      url: app.globalData.baseApiPath + 'TeaOrder/GetById',
+      data: {
+        id: this.data.orderId
+      },
+      method: 'GET',
+      success: function(res) {
+        let order = res.data.data;
+        if (res.data.state) {
+          obj.setData({
+            sendCode: order.send_Code,
+            sendFee: order.send_Fee,
+            price: order.price,
+            count: order.count,
+            address: order.address,
+            customerName: order.customerName,
+            teaName: order.teaName,
+            phone: order.phone,
+            sendTag: order.sendTag
+          });
+        } else {
+          Toast.fail(res.data.message);
+        }
+      }
     })
   }
 })

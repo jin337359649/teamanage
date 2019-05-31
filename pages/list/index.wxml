@@ -1,11 +1,17 @@
 <view>
-  <van-card wx:for="{{orders}}" num="{{item.count}}" tag="{{item.sendTag}}" price="{{item.price}}" desc="{{item.address}}" title="{{item.teaName}}" thumb="{{ item.imgUrl }}" thumb-link="/pages/index/index?orderId={{item.id}}"> 
-  <view wx:if="{{!item.sendTag}}" slot="footer">
-    <van-button bind:click="send" size="mini">发货</van-button>
-  </view>
+  <van-card wx:for="{{orders}}" num="{{item.count}}" tag="{{item.sendTag}}" price="{{item.price}}" desc="{{item.address}}" title="{{item.teaName}}" thumb="{{ item.imgUrl }}" thumb-link="/pages/index/index?orderId={{item.id}}">
+    <view wx:if="{{!item.sendTag}}" slot="footer">
+      <van-button data-id='{{item.id}}' bind:click="send" size="mini">发货</van-button>
+    </view>
+    <view wx:else slot="tags">
+      <van-tag type="danger">{{item.send_Code}}</van-tag>
+    </view>
   </van-card>
 
   <van-button round type="primary" class='fixButton' bind:click="ClickCreate">
     <van-icon name="plus" />
   </van-button>
+
+  <van-toast id="van-toast" />
+
 </view>

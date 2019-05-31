@@ -1,9 +1,12 @@
 <view>
   <van-panel title="{{teaName}}" desc="{{customerName}}-{{phone}}-{{address}}" status="{{price}}*{{count}}">
-    <view>内容</view>
+    <view>
+      <van-cell-group>
+        <van-field bind:input="fieldChange" data-name="sendCode" value="{{sendCode}}" placeholder="快递单号" />
+        <van-field bind:input="fieldChange" data-name="sendFee" value="{{sendFee}}" placeholder="运费" />
+      </van-cell-group>
+      <van-button wx:if="{{!sendTag}}" disabled='{{disSubmit}}' round type="primary" bind:click="submit" class='submitButton'>提交</van-button>
+    </view>
   </van-panel>
-
-  <van-button round type="primary" class='fixButton' bind:click="ClickCreate">
-    <van-icon name="plus" />
-  </van-button>
+    <van-toast id="van-toast" />
 </view>
